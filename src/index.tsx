@@ -1,16 +1,36 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+            retry: false,
+        },
+    },
+});
+
+interface RootWithQueryClientProps {
+    children: React.ReactNode;
+}
+
+const RootWithQueryClient: React.FC<RootWithQueryClientProps> = ({ children }) => (
+    <QueryClientProvider client={queryClient}>
+        <React.StrictMode>
+            {children}
+        </React.StrictMode>
+    </QueryClientProvider>
 );
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+
+ReactDOM.render(
+    <RootWithQueryClient>
+        <App />
+    </RootWithQueryClient>,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
