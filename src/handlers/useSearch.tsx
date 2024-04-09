@@ -22,9 +22,11 @@ async function searchHandler({search, page, year, type}: SearchProps): Promise<S
 }
 
 export const useSearch = ({search, page, year, type}: SearchProps) => {
+    const pageNumber = page === 0 ? 1 : page;
+
     return useQuery({
             queryKey: [API_ENDPOINTS.SEARCH, search, page, year, type],
-            queryFn: () => searchHandler({search, page, year, type})
+            queryFn: () => searchHandler({search, page: pageNumber, year, type})
         }
     )
 };
